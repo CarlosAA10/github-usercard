@@ -3,6 +3,16 @@
            https://api.github.com/users/<your name>
 */
 
+// axios.get('https://api.github.com/users/CarlosAA10')
+//   .then(response => {
+//     console.log(response)
+//     console.log(response.data.login); 
+//   })
+
+//   .catch(error => {
+//     console.log(error);
+//   })
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -45,6 +55,60 @@ const followersArray = [];
 </div>
 
 */
+
+
+function gitUser(object) {
+
+  // elements created below
+
+  const card = document.createElement('div'), 
+        image = document.createElement('img'), 
+        cardInfo = document.createElement('div'), 
+        name = document.createElement('h3'), 
+        userName = document.createElement('p'), 
+        location = document.createElement('p'), 
+        profile = document.createElement('p'), 
+        anchor = document.createElement('a'), 
+        gitfollowers = document.createElement('p'), 
+        gitfollowing = document.createElement('p'), 
+        bio = document.createElement('p'); 
+  // elements appended below
+
+  card.append(image, cardInfo); 
+  cardInfo.append(name, userName, location, profile, gitfollowers, gitfollowing, bio); 
+  profile.append(anchor); 
+
+  // classes added to elements
+  card.classList.add('card'); 
+  cardInfo.classList.add('card-info'); 
+  name.classList.add('name'); 
+  userName.classList.add('username'); 
+ 
+  // src and textContent added to elements below
+  
+  image.src = object.data.avatar_url; 
+  name.textContent = object.data.name; 
+  location.textContent = `Location: ${object.data.location}`; 
+  profile.textContent = `Profile: ${object.data.html_url}`;
+  anchor.href = object.data.url;
+  anchor.textContent = object.data.html_url; 
+  gitfollowers.textContent = `Followers: ${object.data.followers}`; 
+  gitfollowing.textContent = `Folowing: ${object.data.following}`; 
+  bio.textContent = `Bio: ${object.data.bio}`; 
+  
+
+
+
+  return card; 
+}
+
+const parent = document.querySelector('.cards'); 
+
+axios.get('https://api.github.com/users/CarlosAA10')
+  .then(response => {
+    parent.append(gitUser(response)); 
+    console.log(response); 
+  })
 
 /* List of LS Instructors Github username's: 
   tetondan
