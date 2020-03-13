@@ -34,7 +34,9 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['cat', 'dog'];
+
+
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -74,9 +76,6 @@ function gitUser(object) {
         bio = document.createElement('p'); 
   // elements appended below
 
-  card.append(image, cardInfo); 
-  cardInfo.append(name, userName, location, profile, gitfollowers, gitfollowing, bio); 
-  profile.append(anchor); 
 
   // classes added to elements
   card.classList.add('card'); 
@@ -85,11 +84,10 @@ function gitUser(object) {
   userName.classList.add('username'); 
  
   // src and textContent added to elements below
-  
   image.src = object.data.avatar_url; 
   name.textContent = object.data.name; 
   location.textContent = `Location: ${object.data.location}`; 
-  profile.textContent = `Profile: ${object.data.html_url}`;
+  profile.textContent = `Profile: `;
   anchor.href = object.data.url;
   anchor.textContent = object.data.html_url; 
   gitfollowers.textContent = `Followers: ${object.data.followers}`; 
@@ -97,6 +95,10 @@ function gitUser(object) {
   bio.textContent = `Bio: ${object.data.bio}`; 
   
 
+
+  card.append(image, cardInfo); 
+  cardInfo.append(name, userName, location, profile, gitfollowers, gitfollowing, bio); 
+  profile.append(anchor); 
 
 
   return card; 
@@ -109,6 +111,29 @@ axios.get('https://api.github.com/users/CarlosAA10')
     parent.append(gitUser(response)); 
     console.log(response); 
   })
+; 
+
+axios.get('https://api.github.com/users/CarlosAA10/followers')
+  .then(response => {
+    response.data.forEach(item => {
+      followersArray.push(item.url);  
+    })
+  })
+
+  .catch( error => {
+    console.log('you failed homie ' +error); 
+  })
+
+  .then( () => {
+    followersArray.forEach(item => {
+      axios.get(item)
+      .then(response => {
+        parent.append(gitUser(response)); 
+      })
+    })
+  })
+
+
 
 /* List of LS Instructors Github username's: 
   tetondan
